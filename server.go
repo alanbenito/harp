@@ -92,9 +92,9 @@ func (s *Server) init() {
 func (s *Server) upload(info string) {
 	// rsync -av -e 'ssh -o "ProxyCommand ssh -p port bastion-dev@proxy exec nc %h %p 2>/dev/null"' test.txt app@target:~/
 	// rsync -avrP -e 'ssh -o ProxyCommand="ssh -W %h:%p bastion-dev@proxy -p port"' test.txt app@target:~/
-	ssh := fmt.Sprintf(`ssh -l %s -p %s`, s.User, strings.TrimLeft(s.Port, ":"))
+	ssh := fmt.Sprintf(`ssh -o StrictHostKeyChecking=no -l %s -p %s`, s.User, strings.TrimLeft(s.Port, ":"))
 	if s.Proxy != nil {
-		ssh = fmt.Sprintf(`ssh -o ProxyCommand="ssh -W %%h:%%p %s@%s -p %s"`, s.Proxy.User, s.Proxy.Host, strings.TrimLeft(s.Proxy.Port, ":"))
+		ssh = fmt.Sprintf(`ssh -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %%h:%%p %s@%s -p %s"`, s.Proxy.User, s.Proxy.Host, strings.TrimLeft(s.Proxy.Port, ":"))
 	}
 
 	appName := cfg.App.Name
